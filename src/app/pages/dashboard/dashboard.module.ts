@@ -22,6 +22,7 @@ import { TrafficComponent } from './traffic/traffic.component';
 import { TrafficChartComponent } from './traffic/traffic-chart.component';
 import {PowerSocketComponent} from "./power-socket/power-socket.component";
 import {PowerSocketsAreaComponent} from "./power-sockets-area/power-sockets-area.component";
+import {SwitchedNodeComponent} from "./switched-node/switched-node.component";
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import {PowerSocketsAreaComponent} from "./power-sockets-area/power-sockets-area
     TrafficComponent,
     TrafficChartComponent,
     PowerSocketsAreaComponent,
-    PowerSocketComponent
+    PowerSocketComponent,
+    SwitchedNodeComponent
   ],
 })
 export class DashboardModule { }

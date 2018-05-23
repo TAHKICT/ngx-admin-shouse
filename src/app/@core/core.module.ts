@@ -7,6 +7,7 @@ import { of as observableOf } from 'rxjs';
 import { throwIfAlreadyLoaded } from './module-import-guard';
 import { DataModule } from './data/data.module';
 import { AnalyticsService } from './utils/analytics.service';
+import {ServicesModule} from "./services/services.module";
 
 const socialLinks = [
   {
@@ -34,6 +35,7 @@ export class NbSimpleRoleProvider extends NbRoleProvider {
 }
 
 export const NB_CORE_PROVIDERS = [
+  ...ServicesModule.forRoot().providers,
   ...DataModule.forRoot().providers,
   ...NbAuthModule.forRoot({
     providers: {
