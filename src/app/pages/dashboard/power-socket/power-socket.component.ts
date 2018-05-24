@@ -4,10 +4,11 @@ import {Component, Input, OnInit} from '@angular/core';
   selector: 'ngx-power-socket-node',
   styleUrls: ['./power-socket.component.scss'],
   template: `
-      <nb-card (click)="on = !on" [ngClass]="{'off': !on}">
+      <nb-card (click)="clickEvent()" [ngClass]="{'off': !on}">
         <div class="icon-container">
           <div class="icon {{ type }}">
             <ng-content></ng-content>
+            <i class="fa fa-plug"></i>
           </div>
         </div>
   
@@ -21,10 +22,14 @@ import {Component, Input, OnInit} from '@angular/core';
 export class PowerSocketComponent implements OnInit{
 
   @Input() powerSocketNode;
-  @Input() type = 'primary';
-  @Input() on: boolean;
+  private type = 'primary';
+  private on = false;
 
   ngOnInit(): void {
     this.on = this.powerSocketNode.switched == 'true' ? true : false;
+  }
+
+  private clickEvent(){
+    this.on = !this.on;
   }
 }

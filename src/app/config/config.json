@@ -1,0 +1,18 @@
+{
+  "apiUrl": "src",
+  "debugging": true,
+
+  "PowerSocketNodeTypeName" : "PowerSocketNode",
+  "LightSwitchNodeTypeName" : "LightSwitchNode",
+
+  "WebSocket" : {
+    "Node" : {
+      "QueueToReceive" : "/to-user/messages",
+      "QueueToPublish" : "/s-house-rest-api-web-websocket/to-server"
+    },
+    "System" : {
+      "QueueToReceive" : "/to-user/system-messages",
+      "QueueToPublish" : "/s-house-rest-api-web-websocket/to-server"
+    }
+  }
+}

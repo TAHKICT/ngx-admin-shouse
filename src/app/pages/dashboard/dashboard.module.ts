@@ -22,7 +22,8 @@ import { TrafficComponent } from './traffic/traffic.component';
 import { TrafficChartComponent } from './traffic/traffic-chart.component';
 import {PowerSocketComponent} from "./power-socket/power-socket.component";
 import {PowerSocketsAreaComponent} from "./power-sockets-area/power-sockets-area.component";
-import {SwitchedNodeComponent} from "./switched-node/switched-node.component";
+import {LightSwitchAreaComponent} from "./light-switch-area/light-switch-area.component";
+import {LightSwitchComponent} from "./light-switch/light-switch.component";
 
 
 @NgModule({
@@ -48,9 +49,11 @@ import {SwitchedNodeComponent} from "./switched-node/switched-node.component";
     SolarComponent,
     TrafficComponent,
     TrafficChartComponent,
+
     PowerSocketsAreaComponent,
     PowerSocketComponent,
-    SwitchedNodeComponent
+    LightSwitchAreaComponent,
+    LightSwitchComponent
   ],
 })
 export class DashboardModule { }

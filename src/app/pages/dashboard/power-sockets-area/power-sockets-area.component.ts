@@ -6,22 +6,21 @@ import {NodesDataService} from "../../../@core/services/nodes.data.service";
   styleUrls: ['./power-sockets-area.component.scss'],
   template: `
     <div class="row">
-      <ngx-switched-node
-        *ngFor="let node of nodes"
-        [node]="node"
+      <ngx-power-socket-node
+        *ngFor="let node of powerSocketNodes"
+        [powerSocketNode]="node"
         type="primary"
         ngClass="col-xxxl-3 col-md-6">
-        <i class="fa fa-plug"></i>
-      </ngx-switched-node>      
+      </ngx-power-socket-node>      
     </div>
   `
 })
 export class PowerSocketsAreaComponent implements OnInit{
-  nodes  = [];
+  powerSocketNodes  = [];
 
   constructor(private nodesDataService: NodesDataService){}
 
   ngOnInit(): void {
-    this.nodes = this.nodesDataService.getNodes('PowerSocketNode');
+    this.powerSocketNodes = this.nodesDataService.getNodes('PowerSocketNode');
   }
 }

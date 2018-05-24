@@ -1,16 +1,30 @@
-import {Component} from "@angular/core";
+import {Component, Input} from "@angular/core";
 
 @Component({
-  selector: 'ngx-power-socket-node1',
-  styleUrls: ['./power-socket.component.scss'],
+  selector: 'ngx-light-switch-node',
+  styleUrls: ['./light-switch.component.scss'],
   template: `
-    <div class="col-xxxl-3 col-md-6">
-      <ngx-status-card title="Light" type="primary">
-        <i class="nb-lightbulb"></i>
-      </ngx-status-card>
-    </div>
+    <nb-card (click)="switchEvent()" [ngClass]="{'off': !on}">
+      <div class="icon-container">
+        <div class="icon {{ type }}">
+          <ng-content></ng-content>
+        </div>
+      </div>
+
+      <div class="details">
+        <div class="title">{{ lightSwitchNode.description }}</div>
+        <div class="status">{{ on ? 'ON' : 'OFF' }}</div>
+      </div>
+    </nb-card>
   `,
 })
 export class LightSwitchComponent{
 
+  @Input() lightSwitchNode;
+  @Input() type = 'primary';
+  @Input() on = false;
+
+  private switchEvent(){
+    this.on = !this.on;
+  }
 }

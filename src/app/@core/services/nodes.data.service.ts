@@ -2,18 +2,20 @@ import {Injectable, OnInit} from "@angular/core";
 import {HttpClient} from '@angular/common/http';
 
 @Injectable()
-export class NodesDataService{
+export class NodesDataService implements OnInit{
+
   private allNodes = [];
   private activeNodes = [];
   private nodesAreLoaded = false;
 
   constructor(private httpClient: HttpClient){}
 
-  init(): void {
+  ngOnInit(): void {
     this.loadAllNodes();
   }
 
   private loadAllNodes() {
+
     this.httpClient.get<any[]>('http://localhost:8282/web-rest-api/user/admin-ui/content/get-nodes')
       .subscribe(nodes => this.allNodes = nodes, () => {}, () => {
         this.allNodes.forEach(function (node) {
