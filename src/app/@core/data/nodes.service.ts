@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 
 @Injectable()
-export class NodesService{
+export class NodesService {
 
   private nodes = [
     {
@@ -9,28 +9,28 @@ export class NodesService{
       nodeTypeName: 'PowerSocketNode',
       nodeLocation: {
         nodeLocationId: 0,
-        nodeLocationName: 'Kitchen'
+        nodeLocationName: 'Kitchen',
       },
       description: 'ночной',
       switched: false,
-      active: false
+      active: false,
     },
     {
       id: 3,
       nodeTypeName: "PowerSocketNode",
       nodeLocation: {
         nodeLocationId: 0,
-        nodeLocationName: "Kitchen"
+        nodeLocationName: "Kitchen",
       },
       description: "возле шкафа",
       switched: false,
-      active: false
-    }
+      active: false,
+    },
   ];
 
-  constructor(){}
+  constructor(){ }
 
-  public getAllNodes(){
+  public getAllNodes() {
     return this.nodes;
   }
 }

@@ -22,6 +22,6 @@ export class LightSwitchAreaComponent implements OnInit{
   constructor(private nodesDataService: NodesDataService){}
 
   ngOnInit(): void {
-    this.lightSwitchNodes = this.nodesDataService.getNodes('LightSwitchNode');
+    this.lightSwitchNodes = this.nodesDataService.getNodesByType('LightSwitchNode');
   }
 }

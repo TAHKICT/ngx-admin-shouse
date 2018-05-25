@@ -2,8 +2,14 @@
   "apiUrl": "src",
   "debugging": true,
 
-  "PowerSocketNodeTypeName" : "PowerSocketNode",
-  "LightSwitchNodeTypeName" : "LightSwitchNode",
+  "Nodes" : {
+    "PowerSocket" : {
+      "type" : "PowerSocketNode"
+    },
+    "LightSwitch" : {
+      "type" : "LightSwitchNode"
+    }
+  },
 
   "WebSocket" : {
     "Node" : {

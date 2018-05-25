@@ -1,4 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {NodesEventsService} from "../../../@core/services/nodes.events.service";
+import { TSMap } from "typescript-map"
 
 @Component({
   selector: 'ngx-power-socket-node',
@@ -25,11 +27,17 @@ export class PowerSocketComponent implements OnInit{
   private type = 'primary';
   private on = false;
 
+  constructor (private nodesEventService: NodesEventsService){}
+
   ngOnInit(): void {
-    this.on = this.powerSocketNode.switched == 'true' ? true : false;
+    this.on = this.powerSocketNode.isSwitched == 'true' ? true : false;
   }
 
   private clickEvent(){
-    this.on = !this.on;
+    let params = new TSMap();
+    params.set('nodeId', this.powerSocketNode.id);
+    params.set('nodeTypeName', this.powerSocketNode.nodeTypeName)
+    params.set('isSwitched', !this.on);
+    this.nodesEventService.processNodeEvent(params.toJSON());
   }
 }

@@ -48,4 +48,9 @@ export class NodesWebSocketService{
     this._stompService.publish(this.config.get('WebSocket').Node.QueueToPublish, message);
     // this._stompService.publish('/s-house-rest-api-web-websocket/to-server', message);
   }
+
+  public sendEvent(message) {
+    console.log('send event params through WEB socket: ' + message);
+    this._stompService.publish(this.config.get('WebSocket').Node.QueueToPublish, JSON.stringify(message));
+  }
 }

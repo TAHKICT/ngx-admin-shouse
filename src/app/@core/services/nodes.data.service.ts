@@ -29,11 +29,12 @@ export class NodesDataService implements OnInit{
       });
   }
 
-  // getNodes(){
-  //     return this.allNodes;
-  // }
+  getNodes(){
+      return this.allNodes;
+  }
 
-  getNodes(type){
+  getNodesByType(type){
+    console.log('get nodes by type')
     let typedNodes = [];
     this.allNodes.forEach(function (node) {
       if(node.nodeTypeName == type){
