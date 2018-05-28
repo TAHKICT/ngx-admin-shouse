@@ -9,7 +9,6 @@ import {AppConfig} from "../../config/app.config";
 const SERVICES = [
   NodesDataService,
   NodesEventsService,
-  // NodesWebSocketService
 ];
 
 @NgModule({

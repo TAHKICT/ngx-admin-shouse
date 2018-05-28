@@ -35,14 +35,10 @@ const stompConfig: StompConfig = {
 
 //initialize queue
 let initializeConfig = (appConfig: AppConfig,
-                        nodesWebSocketService: NodesWebSocketService,
-                        nodesDataService: NodesDataService) => () => {
+                        nodesWebSocketService: NodesWebSocketService) => () => {
   let configsAndWebSocketLoadPromise = appConfig.load();
-
   configsAndWebSocketLoadPromise
     .then(() => nodesWebSocketService.init())
-    .then( () => nodesDataService.ngOnInit());
-
   return configsAndWebSocketLoadPromise;
 };
 
@@ -68,12 +64,11 @@ let initializeConfig = (appConfig: AppConfig,
 
     AppConfig,
     NodesWebSocketService,
-    NodesDataService,
     // { provide: APP_INITIALIZER, useFactory: (config: AppConfig) => () => config.load(), deps: [AppConfig], multi: true},
     { provide:
       APP_INITIALIZER,
       useFactory: initializeConfig,
-      deps: [ AppConfig, NodesWebSocketService,NodesDataService ],
+      deps: [ AppConfig, NodesWebSocketService ],
       multi: true
     }
 
