@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, Output} from '@angular/core';
 import {NodesEventsService} from "../../../@core/services/nodes.events.service";
 import { TSMap } from "typescript-map"
 import {NodesWebSocketService} from "../../../@core/services/nodes.web-socket.service";
@@ -12,7 +12,10 @@ import {PowerSocketEventMessage} from "../../../@core/models/power-socket.event.
         <div class="icon-container">
           <div class="icon {{ type }}">
             <ng-content></ng-content>
-            <i class="fa fa-plug"></i>
+            <!--<i class="fa fa-plug"></i>-->
+            <!--<i class="ion-load-a"></i>-->
+            <i [ngClass]="{'fa fa-plug' : !inProcess, 'ion-load-a' : inProcess}"></i>
+            <!--<mat-spinner></mat-spinner>-->
           </div>
         </div>
   
@@ -26,30 +29,35 @@ import {PowerSocketEventMessage} from "../../../@core/models/power-socket.event.
 export class PowerSocketComponent implements OnInit{
 
   @Input() powerSocketNode;
+  private on: boolean;
+  private inProcess = false;
   private type = 'primary';
-  private on = false;
   private nodeId: number;
 
   constructor (private nodesEventService: NodesEventsService,
                private nodesWebSocketService: NodesWebSocketService){}
 
   ngOnInit(): void {
-    this.on = this.powerSocketNode.isSwitched == 'true' ? true : false;
+    this.on = this.powerSocketNode.switched;
     this.nodeId = this.powerSocketNode.id;
 
     this.nodesWebSocketService.powerSocketIncomeCalled$.subscribe(
-      (message) => {
-        let powerSocketMessage = message as PowerSocketEventMessage;
-        console.log('powerSocketMessage: ' + powerSocketMessage.nodeId + ' ' + powerSocketMessage.isSwitched + '.this.nodeId: ' + this.nodeId);
-        if(powerSocketMessage.nodeId == this.nodeId){
-          console.log('this.on = powerSocketMessage.isSwitched;')
-          this.on = powerSocketMessage.isSwitched;
-        }
-      }
+      (message) => this.processEventMessage(message)
     );
   }
 
+  private processEventMessage(powerSocketMessage: PowerSocketEventMessage){
+    if (powerSocketMessage.nodeId == this.nodeId) {
+      console.log('PowerSocketEventMessage: ' + ' isSwitched:' + powerSocketMessage.isSwitched + ' ,nodeId:' + powerSocketMessage.nodeId);
+      this.on = powerSocketMessage.isSwitched;
+      console.log('this.on = ' + this.on);
+      this.inProcess = false;
+    }
+  }
+
   private clickEvent(){
+    this.inProcess = true;
+    console.log('clickEvent: Current state:: ' + this.on + '. Requested state: ' + !this.on);
     let params = new TSMap();
     params.set('nodeId', this.powerSocketNode.id);
     params.set('nodeTypeName', this.powerSocketNode.nodeTypeName)

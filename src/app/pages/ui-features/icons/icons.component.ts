@@ -40,7 +40,7 @@ export class IconsComponent {
       'ion-settings', 'ion-wrench', 'ion-hammer', 'ion-edit', 'ion-trash-a', 'ion-trash-b',
       'ion-document', 'ion-document-text', 'ion-clipboard', 'ion-scissors', 'ion-funnel',
       'ion-bookmark', 'ion-email', 'ion-email-unread', 'ion-folder', 'ion-filing', 'ion-archive',
-      'ion-reply', 'ion-reply-all', 'ion-forward',
+      'ion-reply', 'ion-reply-all', 'ion-forward', 'ion-load-a', 'ion-forward'
     ],
 
     fontAwesome: [

@@ -45,10 +45,12 @@ export class NodesWebSocketService{
   private on_next = (message: Message) => {
 
     if(JSON.parse(message.body).nodeTypeName === this.config.get('Nodes').PowerSocket.type) {
-      console.log('make powerSocketMessage object')
-      let powerSocketMessage = new PowerSocketEventMessage(JSON.parse(message.body).nodeId, JSON.parse(message.body).isSwitched);
-      // this.nodesEventService.powerSocketEvent(powerSocketMessage);
-      this.powerSocketIncomeCallSource.next(powerSocketMessage);
+      let isSwitched = false;
+      if(JSON.parse(message.body).isSwitched == true || JSON.parse(message.body).isSwitched == 'true'){
+        isSwitched = true;
+      }
+      // let powerSocketMessage = new PowerSocketEventMessage(JSON.parse(message.body).nodeId, JSON.parse(message.body).isSwitched);
+      this.powerSocketIncomeCallSource.next(new PowerSocketEventMessage(JSON.parse(message.body).nodeId, isSwitched));
     }
     //
     // let mess = JSON.parse(message.body);

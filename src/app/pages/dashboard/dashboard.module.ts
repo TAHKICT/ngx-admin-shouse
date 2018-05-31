@@ -25,7 +25,6 @@ import {PowerSocketsAreaComponent} from "./power-sockets-area/power-sockets-area
 import {LightSwitchAreaComponent} from "./light-switch-area/light-switch-area.component";
 import {LightSwitchComponent} from "./light-switch/light-switch.component";
 
-
 @NgModule({
   imports: [
     ThemeModule,
