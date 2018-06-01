@@ -12,16 +12,13 @@ import {PowerSocketEventMessage} from "../../../@core/models/power-socket.event.
         <div class="icon-container">
           <div class="icon {{ type }}">
             <ng-content></ng-content>
-            <!--<i class="fa fa-plug"></i>-->
-            <!--<i class="ion-load-a"></i>-->
             <i [ngClass]="{'fa fa-plug' : !inProcess, 'ion-load-a' : inProcess}"></i>
-            <!--<mat-spinner></mat-spinner>-->
           </div>
         </div>
   
         <div class="details">
           <div class="title">{{ powerSocketNode.description }}</div>
-          <div class="status">{{ on ? 'ON' : 'OFF' }}</div>
+          <div class="status">{{ status }}</div>
         </div>
       </nb-card>
   `,
@@ -30,20 +27,24 @@ export class PowerSocketComponent implements OnInit{
 
   @Input() powerSocketNode;
   private on: boolean;
-  private inProcess = false;
+  private inProcess: boolean;
   private type = 'primary';
   private nodeId: number;
+  private status: string;
 
   constructor (private nodesEventService: NodesEventsService,
                private nodesWebSocketService: NodesWebSocketService){}
 
   ngOnInit(): void {
     this.on = this.powerSocketNode.switched;
+    this.inProcess = this.powerSocketNode.inProcess;
     this.nodeId = this.powerSocketNode.id;
 
     this.nodesWebSocketService.powerSocketIncomeCalled$.subscribe(
       (message) => this.processEventMessage(message)
     );
+
+    this.generateStatus();
   }
 
   private processEventMessage(powerSocketMessage: PowerSocketEventMessage){
@@ -51,7 +52,9 @@ export class PowerSocketComponent implements OnInit{
       console.log('PowerSocketEventMessage: ' + ' isSwitched:' + powerSocketMessage.isSwitched + ' ,nodeId:' + powerSocketMessage.nodeId);
       this.on = powerSocketMessage.isSwitched;
       console.log('this.on = ' + this.on);
-      this.inProcess = false;
+      this.inProcess = powerSocketMessage.inProcess;
+
+      this.generateStatus();
     }
   }
 
@@ -63,5 +66,15 @@ export class PowerSocketComponent implements OnInit{
     params.set('nodeTypeName', this.powerSocketNode.nodeTypeName)
     params.set('isSwitched', !this.on);
     this.nodesEventService.processNodeEvent(params.toJSON());
+
+    this.generateStatus();
+  }
+
+  private generateStatus(){
+    if(this.inProcess){
+      this.status = 'IN PROCESS'
+    }else{
+      this.status = this.on ? 'ON' : 'OFF';
+    }
   }
 }

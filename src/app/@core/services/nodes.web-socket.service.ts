@@ -36,13 +36,25 @@ export class NodesWebSocketService{
     }
 
     this.messages = this._stompService.subscribe(this.config.get('WebSocket').Node.QueueToReceive);
-    // this.messages = this._stompService.subscribe('/to-user/messages');
     this.subscription = this.messages.subscribe(this.on_next);
     this.subscribed = true;
+
+    this.sendEvent({"checkNodesInProcess" : 111});
   }
 
   //a function to be run on_next message
   private on_next = (message: Message) => {
+    let mess = JSON.parse(message.body);
+
+    if(mess.global === 'Server started'){
+      console.log('Server started');
+    }
+
+
+    if(JSON.parse(message.body).type === "nodesInProcess"){
+      console.log('Nodes in process: ' + JSON.parse(message.body));
+      this.powerSocketIncomeCallSource.next(new PowerSocketEventMessage(JSON.parse(message.body).nodeId, false, true));
+    }
 
     if(JSON.parse(message.body).nodeTypeName === this.config.get('Nodes').PowerSocket.type) {
       let isSwitched = false;
@@ -50,17 +62,8 @@ export class NodesWebSocketService{
         isSwitched = true;
       }
       // let powerSocketMessage = new PowerSocketEventMessage(JSON.parse(message.body).nodeId, JSON.parse(message.body).isSwitched);
-      this.powerSocketIncomeCallSource.next(new PowerSocketEventMessage(JSON.parse(message.body).nodeId, isSwitched));
+      this.powerSocketIncomeCallSource.next(new PowerSocketEventMessage(JSON.parse(message.body).nodeId, isSwitched, false));
     }
-    //
-    // let mess = JSON.parse(message.body);
-    // console.log('Received web socket message: ' + JSON.parse(message.body).nodeId);
-    // console.log('Received web socket message: ' + JSON.parse(message.body).nodeTypeName);
-    // console.log('Received web socket message: ' + JSON.parse(message.body).isSwitched);
-    // console.log('Received web socket message: ' + mess.nodeId);
-    // console.log('Received web socket message: ' + mess.nodeTypeName);
-    // console.log('Received web socket message: ' + mess.isSwitched);
-    // this.nodeMessageIncomeCallSource.next({nodeMessage: mess});
   }
 
   public sendNodeChangeMessage(nodeId, value) {
