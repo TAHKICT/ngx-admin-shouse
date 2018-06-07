@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Observable, Subscription} from "rxjs/Rx";
 import {Message} from '@stomp/stompjs';
-import {StompService} from '@stomp/ng2-stompjs';
+import {StompService, StompState} from '@stomp/ng2-stompjs';
 import {Subject} from 'rxjs/Subject';
 import {AppConfig} from "../../config/app.config";
 import {PowerSocketEventMessage} from "../models/power-socket.event.message";
@@ -37,9 +37,15 @@ export class NodesWebSocketService{
 
     this.messages = this._stompService.subscribe(this.config.get('WebSocket').Node.QueueToReceive);
     this.subscription = this.messages.subscribe(this.on_next);
-    this.subscribed = true;
 
-    this.sendEvent({"checkNodesInProcess" : 111});
+    this._stompService.state
+      .subscribe((state: number) => {
+        console.log(`Stomp connection status: ${StompState[state]}`);
+        if(state == 2){
+          this.subscribed = true;
+          this.sendEvent({"whichNodesInProcess" : 111});
+        }
+      });
   }
 
   //a function to be run on_next message
@@ -48,6 +54,11 @@ export class NodesWebSocketService{
 
     if(mess.global === 'Server started'){
       console.log('Server started');
+    }
+
+    if(JSON.parse(message.body).recipientOfTheMessage === "node"){
+      console.log('Got web socket message for nodeId: ' + JSON.parse(message.body).nodeId);
+      this.nodeMessageIncomeCallSource.next(JSON.parse(message.body));
     }
 
 
@@ -61,7 +72,6 @@ export class NodesWebSocketService{
       if(JSON.parse(message.body).isSwitched == true || JSON.parse(message.body).isSwitched == 'true'){
         isSwitched = true;
       }
-      // let powerSocketMessage = new PowerSocketEventMessage(JSON.parse(message.body).nodeId, JSON.parse(message.body).isSwitched);
       this.powerSocketIncomeCallSource.next(new PowerSocketEventMessage(JSON.parse(message.body).nodeId, isSwitched, false));
     }
   }

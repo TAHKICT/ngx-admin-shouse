@@ -24,6 +24,19 @@ export class PowerSocketsAreaComponent implements OnInit{
 
   ngOnInit(): void {
     this.nodeTypeName = this.appConfig.get('Nodes').PowerSocket.type;
-    this.powerSocketNodes = this.nodesDataService.getNodesByType(this.nodeTypeName);
+
+    if(this.nodesDataService.isDataReady()) {
+      console.log('this.nodesDataService.isDataReady()');
+      this.powerSocketNodes = this.nodesDataService.getNodesByType(this.nodeTypeName);
+    }else{
+      console.log('this.nodesDataService.isDataReady()-------------');
+      this.nodesDataService.dataIsReadyCalled$.subscribe(
+        () => {
+          this.powerSocketNodes = this.nodesDataService.getNodesByType(this.nodeTypeName);
+          console.log('this.powerSocketNodes:');
+          console.log(this.powerSocketNodes);
+        }
+      );
+    }
   }
 }

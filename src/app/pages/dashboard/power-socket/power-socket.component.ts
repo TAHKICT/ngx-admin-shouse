@@ -3,6 +3,7 @@ import {NodesEventsService} from "../../../@core/services/nodes.events.service";
 import { TSMap } from "typescript-map"
 import {NodesWebSocketService} from "../../../@core/services/nodes.web-socket.service";
 import {PowerSocketEventMessage} from "../../../@core/models/power-socket.event.message";
+import {NodesDataService} from "../../../@core/services/nodes.data.service";
 
 @Component({
   selector: 'ngx-power-socket-node',
@@ -12,7 +13,7 @@ import {PowerSocketEventMessage} from "../../../@core/models/power-socket.event.
         <div class="icon-container">
           <div class="icon {{ type }}">
             <ng-content></ng-content>
-            <i [ngClass]="{'fa fa-plug' : !inProcess, 'ion-load-a' : inProcess}"></i>
+            <i [ngClass]="{'fa fa-plug' : !inProcess, 'ion-load-a animated-spinner' : inProcess}"></i>
           </div>
         </div>
   
@@ -36,15 +37,18 @@ export class PowerSocketComponent implements OnInit{
                private nodesWebSocketService: NodesWebSocketService){}
 
   ngOnInit(): void {
+    console.log('this.powerSocketNode.inProcess: ' + this.powerSocketNode.inProcess);
     this.on = this.powerSocketNode.switched;
-    this.inProcess = this.powerSocketNode.inProcess;
     this.nodeId = this.powerSocketNode.id;
+    this.inProcess = this.powerSocketNode.inProcess;
 
     this.nodesWebSocketService.powerSocketIncomeCalled$.subscribe(
       (message) => this.processEventMessage(message)
     );
 
+
     this.generateStatus();
+    console.log('PowerSocketComponent inited');
   }
 
   private processEventMessage(powerSocketMessage: PowerSocketEventMessage){
