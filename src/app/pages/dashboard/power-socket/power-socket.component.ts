@@ -37,7 +37,6 @@ export class PowerSocketComponent implements OnInit{
                private nodesWebSocketService: NodesWebSocketService){}
 
   ngOnInit(): void {
-    console.log('this.powerSocketNode.inProcess: ' + this.powerSocketNode.inProcess);
     this.on = this.powerSocketNode.switched;
     this.nodeId = this.powerSocketNode.id;
     this.inProcess = this.powerSocketNode.inProcess;
@@ -48,16 +47,12 @@ export class PowerSocketComponent implements OnInit{
 
 
     this.generateStatus();
-    console.log('PowerSocketComponent inited');
   }
 
   private processEventMessage(powerSocketMessage: PowerSocketEventMessage){
     if (powerSocketMessage.nodeId == this.nodeId) {
-      console.log('PowerSocketEventMessage: ' + ' isSwitched:' + powerSocketMessage.isSwitched + ' ,nodeId:' + powerSocketMessage.nodeId);
       this.on = powerSocketMessage.isSwitched;
-      console.log('this.on = ' + this.on);
       this.inProcess = powerSocketMessage.inProcess;
-
       this.generateStatus();
     }
   }

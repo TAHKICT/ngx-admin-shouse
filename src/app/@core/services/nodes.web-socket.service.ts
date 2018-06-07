@@ -38,14 +38,14 @@ export class NodesWebSocketService{
     this.messages = this._stompService.subscribe(this.config.get('WebSocket').Node.QueueToReceive);
     this.subscription = this.messages.subscribe(this.on_next);
 
-    this._stompService.state
-      .subscribe((state: number) => {
-        console.log(`Stomp connection status: ${StompState[state]}`);
-        if(state == 2){
-          this.subscribed = true;
-          this.sendEvent({"whichNodesInProcess" : 111});
-        }
-      });
+    // this._stompService.state
+    //   .subscribe((state: number) => {
+    //     console.log(`Stomp connection status: ${StompState[state]}`);
+    //     if(state == 2){
+    //       this.subscribed = true;
+    //       this.sendEvent({"whichNodesInProcess" : 111});
+    //     }
+    //   });
   }
 
   //a function to be run on_next message
