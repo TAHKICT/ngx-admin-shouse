@@ -6,7 +6,7 @@ import { ElectricityService } from './electricity.service';
 import { StateService } from './state.service';
 import { SmartTableService } from './smart-table.service';
 import { PlayerService } from './player.service';
-import {NodesService} from "./nodes.service";
+import {NodesService} from './nodes.service';
 
 const SERVICES = [
   UserService,
@@ -14,7 +14,7 @@ const SERVICES = [
   StateService,
   SmartTableService,
   PlayerService,
-  NodesService
+  NodesService,
 ];
 
 @NgModule({

@@ -1,5 +1,6 @@
-import {Component, OnInit} from "@angular/core";
-import {NodesDataService} from "../../../@core/services/nodes.data.service";
+import {Component, OnInit} from '@angular/core';
+import {NodesDataService} from '../../../@core/services/nodes.data.service';
+import {AppConfig} from '../../../config/app.config';
 
 @Component({
   selector: 'ngx-light-switches-area',
@@ -9,19 +10,29 @@ import {NodesDataService} from "../../../@core/services/nodes.data.service";
       <ngx-light-switch-node
         *ngFor="let node of lightSwitchNodes"
         [lightSwitchNode]="node"
-        type="primary"
         ngClass="col-xxxl-3 col-md-6">
-        <i class="nb-lightbulb"></i>
-      </ngx-light-switch-node>      
+      </ngx-light-switch-node>
     </div>
-  `
+  `,
 })
-export class LightSwitchAreaComponent implements OnInit{
+export class LightSwitchAreaComponent implements OnInit {
   lightSwitchNodes  = [];
+  private nodeTypeName;
 
-  constructor(private nodesDataService: NodesDataService){}
+  constructor (private nodesDataService: NodesDataService,
+              private appConfig: AppConfig) {}
 
   ngOnInit(): void {
-    this.lightSwitchNodes = this.nodesDataService.getNodesByType('LightSwitchNode');
+    this.nodeTypeName = this.appConfig.get('Nodes').LightSwitch.type;
+
+    if (this.nodesDataService.isDataReady()) {
+      this.lightSwitchNodes = this.nodesDataService.getNodesByType(this.nodeTypeName);
+    }else {
+      this.nodesDataService.dataIsReadyCalled$.subscribe(
+        () => {
+          this.lightSwitchNodes = this.nodesDataService.getNodesByType(this.nodeTypeName);
+        },
+      );
+    }
   }
 }

@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {Injectable} from '@angular/core';
 
 @Injectable()
 export class NodesService {
@@ -17,18 +17,18 @@ export class NodesService {
     },
     {
       id: 3,
-      nodeTypeName: "PowerSocketNode",
+      nodeTypeName: 'PowerSocketNode',
       nodeLocation: {
         nodeLocationId: 0,
-        nodeLocationName: "Kitchen",
+        nodeLocationName: 'Kitchen',
       },
-      description: "возле шкафа",
+      description: 'возле шкафа',
       switched: false,
       active: false,
     },
   ];
 
-  constructor(){ }
+  constructor() { }
 
   public getAllNodes() {
     return this.nodes;

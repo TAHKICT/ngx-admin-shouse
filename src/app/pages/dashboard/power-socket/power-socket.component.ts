@@ -1,9 +1,8 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
-import {NodesEventsService} from "../../../@core/services/nodes.events.service";
-import { TSMap } from "typescript-map"
-import {NodesWebSocketService} from "../../../@core/services/nodes.web-socket.service";
-import {PowerSocketEventMessage} from "../../../@core/models/power-socket.event.message";
-import {NodesDataService} from "../../../@core/services/nodes.data.service";
+import {Component, Input, OnInit} from '@angular/core';
+import {NodesEventsService} from '../../../@core/services/nodes.events.service';
+import { TSMap } from 'typescript-map';
+import {NodesWebSocketService} from '../../../@core/services/nodes.web-socket.service';
+import {PowerSocketEventMessage} from '../../../@core/models/power-socket.event.message';
 
 @Component({
   selector: 'ngx-power-socket-node',
@@ -16,7 +15,6 @@ import {NodesDataService} from "../../../@core/services/nodes.data.service";
             <i [ngClass]="{'fa fa-plug' : !inProcess, 'ion-load-a animated-spinner' : inProcess}"></i>
           </div>
         </div>
-  
         <div class="details">
           <div class="title">{{ powerSocketNode.description }}</div>
           <div class="status">{{ status }}</div>
@@ -24,14 +22,14 @@ import {NodesDataService} from "../../../@core/services/nodes.data.service";
       </nb-card>
   `,
 })
-export class PowerSocketComponent implements OnInit{
+export class PowerSocketComponent implements OnInit {
 
   @Input() powerSocketNode;
   private on: boolean;
   private inProcess: boolean;
-  private type = 'primary';
+  type = 'primary';
   private nodeId: number;
-  private status: string;
+  status: string;
 
   constructor (private nodesEventService: NodesEventsService,
                private nodesWebSocketService: NodesWebSocketService){}
@@ -49,15 +47,15 @@ export class PowerSocketComponent implements OnInit{
     this.generateStatus();
   }
 
-  private processEventMessage(powerSocketMessage: PowerSocketEventMessage){
-    if (powerSocketMessage.nodeId == this.nodeId) {
+  private processEventMessage(powerSocketMessage: PowerSocketEventMessage) {
+    if (powerSocketMessage.nodeId === this.nodeId) {
       this.on = powerSocketMessage.isSwitched;
       this.inProcess = powerSocketMessage.inProcess;
       this.generateStatus();
     }
   }
 
-  private clickEvent(){
+  private clickEvent() {
     this.inProcess = true;
     console.log('clickEvent: Current state:: ' + this.on + '. Requested state: ' + !this.on);
     let params = new TSMap();
@@ -69,10 +67,10 @@ export class PowerSocketComponent implements OnInit{
     this.generateStatus();
   }
 
-  private generateStatus(){
-    if(this.inProcess){
+  private generateStatus() {
+    if (this.inProcess) {
       this.status = 'IN PROCESS'
-    }else{
+    }else {
       this.status = this.on ? 'ON' : 'OFF';
     }
   }

@@ -20,5 +20,11 @@
       "QueueToReceive" : "/to-user/system-messages",
       "QueueToPublish" : "/s-house-rest-api-web-websocket/to-server"
     }
+  },
+
+  "RestApi" : {
+    "Topics" : {
+
+    }
   }
 }
