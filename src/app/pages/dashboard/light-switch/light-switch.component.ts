@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NodesEventsService} from '../../../@core/services/nodes.events.service';
 import {NodesWebSocketService} from '../../../@core/services/nodes.web-socket.service';
-import {PowerSocketEventMessage} from '../../../@core/models/power-socket.event.message';
 import {TSMap} from 'typescript-map';
+import {LightSwitchEventMessage} from '../../../@core/models/light-switch.event.message';
 
 @Component({
   selector: 'ngx-light-switch-node',
@@ -40,7 +40,7 @@ export class LightSwitchComponent implements OnInit {
     this.nodeId = this.lightSwitchNode.id;
     this.inProcess = this.lightSwitchNode.inProcess;
 
-    this.nodesWebSocketService.powerSocketIncomeCalled$.subscribe(
+    this.nodesWebSocketService.lightSwitchIncomeCalled$.subscribe(
       (message) => this.processEventMessage(message),
     );
 
@@ -48,21 +48,22 @@ export class LightSwitchComponent implements OnInit {
     this.generateStatus();
   }
 
-  private processEventMessage(powerSocketMessage: PowerSocketEventMessage) {
-    if (powerSocketMessage.nodeId === this.nodeId) {
-      this.on = powerSocketMessage.isSwitched;
-      this.inProcess = powerSocketMessage.inProcess;
+  private processEventMessage(message: LightSwitchEventMessage) {
+    console.log('processEventMessage: ' + message.nodeId + ' ' + message.turnedOn);
+    if (message.nodeId === this.nodeId) {
+      this.on = message.turnedOn;
       this.generateStatus();
     }
   }
 
   private clickEvent() {
-    this.inProcess = true;
+    // this.inProcess = true;
+    this.on = !this.on;
     console.log('clickEvent: Current state:: ' + this.on + '. Requested state: ' + !this.on);
     const params = new TSMap();
     params.set('nodeId', this.lightSwitchNode.id);
-    params.set('nodeTypeName', this.lightSwitchNode.nodeTypeName)
-    params.set('isSwitched', !this.on);
+    params.set('nodeTypeName', this.lightSwitchNode.nodeTypeName);
+    params.set('requestedState', this.on === true ? 'on' : 'off');
     this.nodesEventService.processNodeEvent(params.toJSON());
 
     this.generateStatus();

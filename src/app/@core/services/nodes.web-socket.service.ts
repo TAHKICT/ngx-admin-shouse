@@ -1,11 +1,11 @@
-import {Injectable} from "@angular/core";
-import {Observable, Subscription} from "rxjs/Rx";
+import {Injectable} from '@angular/core';
+import {Observable, Subscription} from 'rxjs/Rx';
 import {Message} from '@stomp/stompjs';
 import {StompService, StompState} from '@stomp/ng2-stompjs';
 import {Subject} from 'rxjs/Subject';
-import {AppConfig} from "../../config/app.config";
-import {PowerSocketEventMessage} from "../models/power-socket.event.message";
-import {NodesEventsService} from "./nodes.events.service";
+import {AppConfig} from '../../config/app.config';
+import {PowerSocketEventMessage} from '../models/power-socket.event.message';
+import {LightSwitchEventMessage} from '../models/light-switch.event.message';
 
 @Injectable()
 export class NodesWebSocketService{
@@ -17,6 +17,10 @@ export class NodesWebSocketService{
   // Make observable incoming power socket message event
   private powerSocketIncomeCallSource = new Subject<PowerSocketEventMessage>();
   powerSocketIncomeCalled$ = this.powerSocketIncomeCallSource.asObservable();
+
+  // Make observable incoming power socket message event
+  private lightSwitchIncomeCallSource = new Subject<LightSwitchEventMessage>();
+  lightSwitchIncomeCalled$ = this.lightSwitchIncomeCallSource.asObservable();
 
   constructor (private _stompService: StompService,
                private config: AppConfig) {}
@@ -48,15 +52,20 @@ export class NodesWebSocketService{
     //   });
   }
 
-  //a function to be run on_next message
+  // a function to be run on_next message
   private on_next = (message: Message) => {
     let mess = JSON.parse(message.body);
 
-    if(mess.global === 'Server started'){
+    if (mess.global === 'Server started') {
       console.log('Server started');
     }
 
-    if(JSON.parse(message.body).recipientOfTheMessage === "node"){
+    if (JSON.parse(message.body).nodeTypeName === 'LightSwitchNode') {
+      console.log('Got web socket message for LightSwitchNode');
+      this.lightSwitchIncomeCallSource.next(JSON.parse(message.body));
+    }
+
+    if (JSON.parse(message.body).recipientOfTheMessage === "node") {
       console.log('Got web socket message for nodeId: ' + JSON.parse(message.body).nodeId);
       this.nodeMessageIncomeCallSource.next(JSON.parse(message.body));
     }
